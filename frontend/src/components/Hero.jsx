@@ -1,4 +1,5 @@
 import React from 'react'
+import { assets } from '../assets/assets'
 
 const Hero = () => {
   return (
@@ -12,13 +13,15 @@ const Hero = () => {
         </div>
         <h1 className='text-3xl sm:py-3 lg:text-5xl leading-relaxed'>Latest Arrival</h1>
         <div className='flex items-center gap-2'>
-            <p className='font-semibold text-sm md:text-base'>SHOP NN</p>
+            <p className='font-semibold text-sm md:text-base'>SHOP NOW</p>
             <p className='w-8 md:w-11 h-[1px] bg-[#414141]'></p>
 
         </div>
       </div>
       
       </div>
+      {/* HeroRight side */}
+      <img className='w-full sm:w-1/2' src={assets.hero_img} alt="" />
     </div>
   )
 }
