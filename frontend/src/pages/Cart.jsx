@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { assets, products } from '../assets/assets'
+import { assets } from '../assets/assets'
 import { ShopContext } from '../context/ShopContext'
 import Title from '../components/Title';
 import CartTotal from '../components/CartTotal';
+
+
 
 const Cart = () => {
   const {products,currency,cartItems,updateQuantity,navigate} =  useContext(ShopContext);
