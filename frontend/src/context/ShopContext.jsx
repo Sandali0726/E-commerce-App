@@ -57,17 +57,30 @@ const ShopContextProvider = (props) => {
                 setCartItems(cartData);
     }
     
-    useEffect (()=> {
-        console.log(cartItems);
-        
+    const getCartAmount =  () => {
+        let toalAmount = 0;
+        for(const items in cartItems){
+            let itemInfo = products.find((product) => product._id === items);
+            for (const item in cartItems[items]){
+                try{
+                    if (cartItems[items][item]>0) {
+                        toalAmount+=itemInfo.price * cartItems[items][item]
+                    }
+                }
+                catch(error){
 
-    },[cartItems])
+                }
+            }
+        }
+        return toalAmount
+    }
 
     const value = {
             products,currency,delivery_fee,
             search,setSearch,setShowSearch,showSearch,
             cartItems,addToCart,
-            getCartCount,updateQuantity
+            getCartCount,updateQuantity,
+            getCartAmount
     }
     return (
         <ShopContext.Provider value={value}>
