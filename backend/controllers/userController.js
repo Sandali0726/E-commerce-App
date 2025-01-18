@@ -1,7 +1,7 @@
 import userModel from "../models/userModel";
 import bycrypt from "bcrypt";
 import validator from "validator";
-import jwt from "jasonwebtoken"
+import jwt from "jsonwebtoken"
 
 const createToken = (id) => {
     return jwt.sign({id},process.env.JWT_SECRET)
