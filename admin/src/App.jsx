@@ -12,10 +12,12 @@ export const backendUrl = import.meta.env.VITE_BACKEND_URL;
 export const currency = '$'
 
 const App = () => {
-  const [token, setToken] = useState(localStorage.getItem('token')?localStorage.getItem('token'):''
+  const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token'):''
 );
   useEffect (() => {
+    if(token){
       localStorage.setItem('token',token)
+    }     
   },[token])
 
   return (
