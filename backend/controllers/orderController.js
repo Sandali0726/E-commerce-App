@@ -73,7 +73,7 @@ const placeOrderStripe = async (req,res) =>{
          quantity: item.quantity
      }))
      line_items.push({
-      rice_data:{
+      price_data:{
          currency:currency,
          product_data:{
             name:'Delivery Charges'
@@ -201,7 +201,7 @@ const updateStatus = async (req,res) =>{
    try {
       const{ orderId,status} = req.body
       await orderModel.findByIdAndUpdate(orderId, {status })
-      res.json({sucess:true,message:'Status Updated'})
+      res.json({success:true,message:'Status Updated'})
    } catch (error) {
       console.log(error);
       res.json({success:false,message:error.message})

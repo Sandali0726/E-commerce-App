@@ -1,67 +1,86 @@
 import userModel from '../models/userModel.js';
 
-// add product to user cart
-const addToCart = async (req,res) => {
+// Add product to user cart
+const addToCart = async (req, res) => {
     try {
-        const {userId, itemId, size} = req.body;
-        const userData = await userModel.findById(userId);
-        let cartData = await userData.cartData;
+        const { userId, itemId, size } = req.body;
 
-        if (cartData[itemId]) {
-            if (cartData[itemId][size]) {
-                cartData[itemId][size]+=1;
-            }
-            else{
-                cartData[itemId][size] = 1;
-            }
-            
+        if (!userId || !itemId || !size) {
+            return res.json({ success: false, message: "Missing required fields" });
         }
-        else{
-            cartData[itemId] = {}
-            cartData[itemId][size]=1;
+
+        const userData = await userModel.findById(userId);
+        if (!userData) {
+            return res.json({ success: false, message: "User not found" });
         }
-        await userModel.findByIdAndUpdate(userId,{cartData})
-        res.json({success:true,message:"Added to cart"})
+
+        let cartData = userData.cartData || {}; // Ensure cartData is always an object
+
+        if (!cartData[itemId]) {
+            cartData[itemId] = {};
+        }
+        cartData[itemId][size] = (cartData[itemId][size] || 0) + 1;
+
+        await userModel.findByIdAndUpdate(userId, { cartData }, { new: true });
+        res.json({ success: true, message: "Added to cart" });
 
     } catch (error) {
-        console.log(error);
-        res.json({success:false,message:error.message})
-        
+        console.error(error);
+        res.json({ success: false, message: error.message });
     }
-}
+};
 
-// update  user cart
-const updateCart = async (req,res) => {
+// Update user cart
+const updateCart = async (req, res) => {
     try {
-        const {userId,itemId,size, quantity}=req.body;
-        const userData = await userModel.findById(userId);
+        const { userId, itemId, size, quantity } = req.body;
 
-        let cartData = await userData.cartData;
+        if (!userId || !itemId || !size || quantity === undefined) {
+            return res.json({ success: false, message: "Missing required fields" });
+        }
+
+        const userData = await userModel.findById(userId);
+        if (!userData) {
+            return res.json({ success: false, message: "User not found" });
+        }
+
+        let cartData = userData.cartData || {};
+        if (!cartData[itemId]) {
+            return res.json({ success: false, message: "Item not found in cart" });
+        }
 
         cartData[itemId][size] = quantity;
 
-        await userModel.findByIdAndUpdate(userId,{cartData})
-        res.json({success:true,message:"Cart Updated"})
-    } catch (error) {
-        console.log(error);
-        res.json({success:false,message:error.message})
-    }
-    
-}
+        await userModel.findByIdAndUpdate(userId, { cartData }, { new: true });
+        res.json({ success: true, message: "Cart updated" });
 
-// gte user cart data
-const getUserCart = async (req,res) => {
+    } catch (error) {
+        console.error(error);
+        res.json({ success: false, message: error.message });
+    }
+};
+
+// Get user cart data
+const getUserCart = async (req, res) => {
     try {
-        const {userId} = req.body;
+        const { userId } = req.body;
+
+        if (!userId) {
+            return res.json({ success: false, message: "User ID is required" });
+        }
+
         const userData = await userModel.findById(userId);
+        if (!userData) {
+            return res.json({ success: false, message: "User not found" });
+        }
 
-        let cartData = await userData.cartData;
-        res.json({success:true,cartData})
-        
+        let cartData = userData.cartData || {};
+        res.json({ success: true, cartData });
+
     } catch (error) {
-        console.log(error);
-        res.json({success:false,message:error.message})
+        console.error(error);
+        res.json({ success: false, message: error.message });
     }
-}
+};
 
-export {addToCart,updateCart,getUserCart}
+export { addToCart, updateCart, getUserCart };
